@@ -196,6 +196,65 @@ def filtrar_paises(paises):
         else:
             print(f"Error: '{opcion_filtro}' no es una opcion valida. Intente de nuevo.")
 
+def mostrar_menu_ordenar():
+    
+    #imprime opciones sub menu ordenar y devuelve string
+
+    print("\n--- Sub-Menu: Ordenar paises ---")
+    print("1. Ordenar por nombre")
+    print("2. Ordenar por población")
+    print("3. Ordenar por Superficie")
+    print("4. Volver al menu principal")
+    return input("Seleccione una opcion de filtro (1-4): ")
+
+def ordenar_paises(paises):
+    while True:
+        opc_menu_ordenar = mostrar_menu_ordenar()
+
+        if opc_menu_ordenar == "1":
+            
+            paises_ordenados = sorted(paises, key=lambda x: x['nombre'].lower())
+            print("\n==> Países ordenados por NOMBRE:")
+            mostrar_paises(paises_ordenados)
+
+        elif opc_menu_ordenar == "2":
+
+            paises_ordenados = sorted(paises, key=lambda x: x['poblacion'])
+            print("\n==> Países ordenados por POBLACIÓN:")
+            mostrar_paises(paises_ordenados)
+
+        elif opc_menu_ordenar == "3":
+            orden = input("Ingrese si lo quiere en orden ascendente(A) o descendente(D): ").upper().strip()
+            while True:
+                if orden == "":
+                    print("Error! este campo no puede estar vacío")
+                    orden = input("Ingrese si lo quiere en orden ascendente(A) o descendente(D): ").upper().strip()
+                elif orden != "A" and orden != "D":
+                    print("La respuesta que quiere ingresar es inválida")
+                    orden = input("Ingrese si lo quiere en orden ascendente(A) o descendente(D): ").upper().strip()
+                else:
+                    break
+            if orden == "A":       
+
+                paises_ordenados = sorted(paises, key=lambda x: x['superficie'])
+                print("\n==> Países ordenados por SUPERFICIE:")
+                mostrar_paises(paises_ordenados)
+
+            elif orden == "D":
+
+                paises_ordenados = sorted(paises, key=lambda x: x['superficie'], reverse= True)
+                print("\n==> Países ordenados por SUPERFICIE:")
+                mostrar_paises(paises_ordenados)
+            
+        elif opc_menu_ordenar == "4":
+            print("Volviendo al menu principal...")
+            break 
+
+        else:
+            print(f"Error: '{opc_menu_ordenar}' no es una opcion valida. Intente de nuevo.")
+
+        
+
 #funciones aux para las validaciones
 
 def validar_num(mensaje):
@@ -291,9 +350,9 @@ def main():
             filtrar_paises(paises)
             
         elif opcion == '3':
-            # [PENDIENTE]
-            print("...funcion de ordenamiento pendiente...")
-            
+
+            ordenar_paises(paises)  
+
         elif opcion == '4':
             # [PENDIENTE]
             print("...funcion de estadisticas pendiente...")
