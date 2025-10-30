@@ -252,6 +252,54 @@ def ordenar_paises(paises):
 
         else:
             print(f"Error: '{opc_menu_ordenar}' no es una opcion valida. Intente de nuevo.")
+    
+def mostrar_estadisticas(paises):
+    if not paises:
+        print("No hay datos de países cargados.")
+        return
+
+    print("\n--- Estadísticas Globales ---")
+
+    # País con mayor y menor población
+    pais_mas_poblado = max(paises, key=lambda x: x['poblacion'])
+    pais_menos_poblado = min(paises, key=lambda x: x['poblacion'])
+
+    # País con mayor y menor superficie
+    pais_mas_grande = max(paises, key=lambda x: x['superficie'])
+    pais_mas_chico = min(paises, key=lambda x: x['superficie'])
+
+    # Promedios globales
+    prom_poblacion = sum(p['poblacion'] for p in paises) / len(paises)
+    prom_superficie = sum(p['superficie'] for p in paises if p['superficie'] > 0) / len([p for p in paises if p['superficie'] > 0])
+
+    print(f"\n🌍 Total de países: {len(paises)}")
+    print(f"👑 País más poblado: {pais_mas_poblado['nombre']} ({pais_mas_poblado['poblacion']:,} hab.)")
+    print(f"🫥 País menos poblado: {pais_menos_poblado['nombre']} ({pais_menos_poblado['poblacion']:,} hab.)")
+    print(f"🌐 País más grande: {pais_mas_grande['nombre']} ({pais_mas_grande['superficie']:,} km²)")
+    print(f"📏 País más chico: {pais_mas_chico['nombre']} ({pais_mas_chico['superficie']:,} km²)")
+    print(f"📊 Promedio de población: {prom_poblacion:,.0f} hab.")
+    print(f"📏 Promedio de superficie: {prom_superficie:,.0f} km²")
+
+    # --- Estadísticas por continente ---
+    print("\n--- Estadísticas por Continente ---")
+    continentes = {}
+
+    for pais in paises:
+        cont = pais['continente']
+        if cont not in continentes:
+            continentes[cont] = {'poblacion_total': 0, 'superficie_total': 0, 'cantidad': 0}
+        continentes[cont]['poblacion_total'] += pais['poblacion']
+        continentes[cont]['superficie_total'] += pais['superficie']
+        continentes[cont]['cantidad'] += 1
+
+    for cont, datos in continentes.items():
+        pobl_prom = datos['poblacion_total'] / datos['cantidad']
+        sup_prom = datos['superficie_total'] / datos['cantidad']
+        print(f"\n🌎 {cont}:")
+        print(f"   - Países: {datos['cantidad']}")
+        print(f"   - Promedio población: {pobl_prom:,.0f} hab.")
+        print(f"   - Promedio superficie: {sup_prom:,.0f} km²")
+
 
         
 
@@ -354,8 +402,8 @@ def main():
             ordenar_paises(paises)  
 
         elif opcion == '4':
-            # [PENDIENTE]
-            print("...funcion de estadisticas pendiente...")
+            
+            mostrar_estadisticas(paises)
             
         elif opcion == '5':
             print("Gracias por usar el programa. ¡Adios!")
