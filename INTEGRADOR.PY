@@ -128,12 +128,9 @@ def buscar_pais_por_nombre(paises, nombre_buscado):
             
     mostrar_paises(resultados)
     
-# --- Funcion Principal (main) ---
+
 
 def main():
-    """
-    Funcion principal que ejecuta el programa.
-    """
     
     url_api = "https://restcountries.com/v3.1/all?fields=name,population,area,continents"
     paises = cargar_datos_api(url_api)
