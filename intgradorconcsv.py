@@ -1,15 +1,17 @@
-import requests
-import csv
-import os
+import requests #sirve para obtener los datos de la API
+import csv #para trabajar con el archivo csv
+import os #para verificar la exitencia del csv
 
+
+#pedimos los datos a la API con get 
 def cargar_datos_api(url):
     lista_paises = []
     try:
         print("Obteniendo datos desde la API... (esto puede tardar un momento)")
-        respuesta = requests.get(url, timeout=10)
+        respuesta = requests.get(url, timeout=10)# esto es para que si no hay respuesta en 10 seg se cancela
         respuesta.raise_for_status()
-        datos_json = respuesta.json()
-        print(f"Datos recibidos. Procesando {len(datos_json)} países...")
+        datos_json = respuesta.json()# en esta parte la respuesta que viene en formato .json la transformamos en una lista de diccionarios
+        print(f"Datos recibidos,{len(datos_json)} países")
 
         for pais_api in datos_json:
             try:
@@ -44,12 +46,12 @@ def guardar_datos_csv(paises, ruta_archivo):
         return
     cabeceras = ["nombre", "poblacion", "superficie", "continente"]
     try:
-        with open(ruta_archivo, mode="w", newline="", encoding="utf-8-sig") as archivo:
-            escritor_csv = csv.DictWriter(archivo, fieldnames=cabeceras)
-            escritor_csv.writeheader()
-            escritor_csv.writerows(paises)
+        with open(ruta_archivo, mode="w", newline="", encoding="utf-8-sig") as archivo:# modo w abre o crea archivo csv
+            escritor_csv = csv.DictWriter(archivo, fieldnames=cabeceras)# escribe lista de diccionarios en el csv
+            escritor_csv.writeheader()# primera fila con los nombres de las columnas 
+            escritor_csv.writerows(paises)# escribe los paises 
         print(f"Datos guardados exitosamente en '{ruta_archivo}'")
-    except IOError as e:
+    except IOError as e: #si no se abre o no se escribe salta este error 
         print(f"Error al escribir el archivo CSV: {e}")
     except Exception as e:
         print(f"Ocurrió un error inesperado al guardar el CSV: {e}")
@@ -58,7 +60,7 @@ def cargar_datos_csv(ruta_archivo):
     lista_paises = []
     try:
         with open(ruta_archivo, mode="r", encoding="utf-8-sig") as archivo:
-            lector_csv = csv.DictReader(archivo)
+            lector_csv = csv.DictReader(archivo)#convierte las filas en diccionario
             for fila in lector_csv:
                 try:
                     pais = {
@@ -81,6 +83,8 @@ def cargar_datos_csv(ruta_archivo):
     print(f"Se cargaron {len(lista_paises)} países exitosamente desde '{ruta_archivo}'.")
     return lista_paises
 
+
+#muestra el menu principal
 def mostrar_menu():
     print("\n--- Menú Principal: Gestión de Países ---")
     print("1. Buscar un país por nombre")
@@ -92,7 +96,7 @@ def mostrar_menu():
     return input("Seleccione una opción (1-6): ")
 
 def mostrar_menu_filtrado():
-    print("\n--- Sub-Menu: Filtrar Países ---")
+    print("\nSubMenu: Filtrar Países")
     print("1. Filtrar por Continente")
     print("2. Filtrar por Rango de Población")
     print("3. Filtrar por Rango de Superficie")
@@ -102,7 +106,7 @@ def mostrar_menu_filtrado():
 def filtrar_paises(paises):
     while True:
         opcion_filtro = mostrar_menu_filtrado()
-        resultados = []
+        resultados = []# se crea lista vacia para que no salte errores 
         if opcion_filtro == "1":
             continente_buscado = input("Ingrese el nombre del continente: ").strip()
             if not continente_buscado:
@@ -111,7 +115,8 @@ def filtrar_paises(paises):
             for pais in paises:
                 if continente_buscado.lower() == pais["continente"].lower():
                     resultados.append(pais)
-            mostrar_paises(resultados)
+            mostrar_paises(resultados)#para imprimir resultados
+
         elif opcion_filtro == "2":
             print("--- Filtro por Población ---")
             min_poblacion = validar_num("Ingrese la población MÍNIMA: ")
@@ -123,6 +128,7 @@ def filtrar_paises(paises):
                 if min_poblacion <= pais["poblacion"] <= max_poblacion:
                     resultados.append(pais)
             mostrar_paises(resultados)
+
         elif opcion_filtro == "3":
             print("--- Filtro por Superficie (km²) ---")
             min_superficie = validar_num("Ingrese la superficie MÍNIMA: ")
@@ -134,6 +140,7 @@ def filtrar_paises(paises):
                 if min_superficie <= pais["superficie"] <= max_superficie:
                     resultados.append(pais)
             mostrar_paises(resultados)
+
         elif opcion_filtro == "4":
             print("Volviendo al menú principal...")
             break
@@ -141,7 +148,7 @@ def filtrar_paises(paises):
             print(f"Error: '{opcion_filtro}' no es una opción válida.")
 
 def mostrar_menu_ordenar():
-    print("\n--- Sub-Menu: Ordenar Países ---")
+    print("\nSub-Menu: Ordenar Países")
     print("1. Ordenar por nombre")
     print("2. Ordenar por población")
     print("3. Ordenar por superficie")
@@ -150,9 +157,10 @@ def mostrar_menu_ordenar():
 
 def ordenar_paises(paises):
     while True:
+        #en las opciones usamos lambda para los criterios del sorted
         opc = mostrar_menu_ordenar()
         if opc == "1":
-            paises_ordenados = sorted(paises, key=lambda x: x["nombre"].lower())
+            paises_ordenados = sorted(paises, key=lambda x: x["nombre"].lower())#sorted ordena segun criterios
             mostrar_paises(paises_ordenados)
         elif opc == "2":
             paises_ordenados = sorted(paises, key=lambda x: x["poblacion"])
@@ -202,7 +210,7 @@ def mostrar_estadisticas(paises):
         print(f"  Promedio población: {pobl_prom:,.0f} hab.")
         print(f"  Promedio superficie: {sup_prom:,.0f} km²")
 
-def validar_num(mensaje):
+def validar_num(mensaje):#funcion para validar las entradas de datos numericos
     while True:
         texto = input(mensaje)
         try:
@@ -214,7 +222,7 @@ def validar_num(mensaje):
         except ValueError:
             print("Debe ingresar un número válido.")
 
-def mostrar_paises(lista):
+def mostrar_paises(lista):# va mostrando los paises que cumplan los criterios en los que se usen 
     if not lista:
         print("\nNo se encontraron países que cumplan el criterio.")
         return
@@ -222,18 +230,18 @@ def mostrar_paises(lista):
     for p in lista:
         print(f"- {p['nombre']}")
         print(f"  Población:  {p['poblacion']:,}")
-        print(f"  Superficie: {p['superficie']:,} km²")
+        print(f"  Superficie: {p['superficie']:,} km2")
         print(f"  Continente: {p['continente']}")
         print("-"*20)
 
 def buscar_pais_por_nombre(paises,nombre):
     if not nombre.strip():
-        print("El término de búsqueda no puede estar vacío.")
+        print("Este campo no puede estar vacío.")
         return
     resultados = [p for p in paises if nombre.lower() in p["nombre"].lower()]
     mostrar_paises(resultados)
 
-def confirmar_accion(mensaje):
+def confirmar_accion(mensaje):# devuelve bool 
     while True:
         resp = input(f"{mensaje} (S/N): ").strip().upper()
         if resp=="S":
@@ -242,6 +250,10 @@ def confirmar_accion(mensaje):
             return False
         else:
             print("Ingrese 'S' para Sí o 'N' para No.")
+
+
+
+# principal 
 
 def main():
     archivo_csv = "paises.csv"
@@ -273,10 +285,10 @@ def main():
         elif opcion=="4":
             mostrar_estadisticas(paises)
         elif opcion=="5":
-            print("Gracias por usar el programa. ¡Adiós!")
+            print("Gracias por usar el programa, sos tremendo crack, espero que te vaya muy bien")
             break
         elif opcion=="6":
-            if confirmar_accion("¿Desea actualizar los datos desde la API? Se sobrescribirá el CSV actual"):
+            if confirmar_accion("¿Desea actualizar los datos desde la API? se cambiará el csv actual"):
                 nuevos_datos = cargar_datos_api(url_api)
                 if nuevos_datos:
                     guardar_datos_csv(nuevos_datos, archivo_csv)
