@@ -272,13 +272,13 @@ def mostrar_estadisticas(paises):
     prom_poblacion = sum(p['poblacion'] for p in paises) / len(paises)
     prom_superficie = sum(p['superficie'] for p in paises if p['superficie'] > 0) / len([p for p in paises if p['superficie'] > 0])
 
-    print(f"\n🌍 Total de países: {len(paises)}")
-    print(f"👑 País más poblado: {pais_mas_poblado['nombre']} ({pais_mas_poblado['poblacion']:,} hab.)")
-    print(f"🫥 País menos poblado: {pais_menos_poblado['nombre']} ({pais_menos_poblado['poblacion']:,} hab.)")
-    print(f"🌐 País más grande: {pais_mas_grande['nombre']} ({pais_mas_grande['superficie']:,} km²)")
-    print(f"📏 País más chico: {pais_mas_chico['nombre']} ({pais_mas_chico['superficie']:,} km²)")
-    print(f"📊 Promedio de población: {prom_poblacion:,.0f} hab.")
-    print(f"📏 Promedio de superficie: {prom_superficie:,.0f} km²")
+    print(f"\n Total de países: {len(paises)}")
+    print(f" País más poblado: {pais_mas_poblado['nombre']} ({pais_mas_poblado['poblacion']:,} hab.)")
+    print(f" País menos poblado: {pais_menos_poblado['nombre']} ({pais_menos_poblado['poblacion']:,} hab.)")
+    print(f" País más grande: {pais_mas_grande['nombre']} ({pais_mas_grande['superficie']:,} km²)")
+    print(f" País más chico: {pais_mas_chico['nombre']} ({pais_mas_chico['superficie']:,} km²)")
+    print(f"Promedio de población: {prom_poblacion:,.0f} hab.")
+    print(f" Promedio de superficie: {prom_superficie:,.0f} km²")
 
     # --- Estadísticas por continente ---
     print("\n--- Estadísticas por Continente ---")
@@ -295,7 +295,7 @@ def mostrar_estadisticas(paises):
     for cont, datos in continentes.items():
         pobl_prom = datos['poblacion_total'] / datos['cantidad']
         sup_prom = datos['superficie_total'] / datos['cantidad']
-        print(f"\n🌎 {cont}:")
+        print(f"\n {cont}:")
         print(f"   - Países: {datos['cantidad']}")
         print(f"   - Promedio población: {pobl_prom:,.0f} hab.")
         print(f"   - Promedio superficie: {sup_prom:,.0f} km²")
