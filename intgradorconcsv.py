@@ -190,10 +190,10 @@ def mostrar_estadisticas(paises):
     print(f"\nTotal de países: {len(paises)}")
     print(f"País más poblado: {pais_mas_poblado['nombre']} ({pais_mas_poblado['poblacion']:,} hab.)")
     print(f"País menos poblado: {pais_menos_poblado['nombre']} ({pais_menos_poblado['poblacion']:,} hab.)")
-    print(f"País más grande: {pais_mas_grande['nombre']} ({pais_mas_grande['superficie']:,} km²)")
-    print(f"País más chico: {pais_mas_chico['nombre']} ({pais_mas_chico['superficie']:,} km²)")
+    print(f"País más grande: {pais_mas_grande['nombre']} ({pais_mas_grande['superficie']:,} km2)")
+    print(f"País más chico: {pais_mas_chico['nombre']} ({pais_mas_chico['superficie']:,} km2)")
     print(f"Promedio de población: {prom_poblacion:,.0f} hab.")
-    print(f"Promedio de superficie: {prom_superficie:,.0f} km²")
+    print(f"Promedio de superficie: {prom_superficie:,.0f} km2")
     continentes = {}
     for pais in paises:
         cont = pais["continente"]
